@@ -96,9 +96,10 @@ public class NewHostedWizard extends Wizard implements INewWizard {
 			JSONArray icons = manifest.getJSONArray("icons");
 			manifest.put("name", applicationName);		
 			manifest.put("xwalk_version", NewProjectWizardState.xwalkVersion);
-			manifest.remove("start_url");
-			manifest.put("app", new JSONObject());
-			manifest.getJSONObject("app").put("launch", new JSONObject().put("web_url", nProjectWizardState.hostedLaunchUrl));
+//			manifest.remove("start_url");
+//			manifest.put("app", new JSONObject());
+//			manifest.getJSONObject("app").put("launch", new JSONObject().put("web_url", nProjectWizardState.hostedLaunchUrl));
+			manifest.put("start_url", NewProjectWizardState.hostedStartUrl);
 			
 			if(!NewProjectWizardState.iconPathChanged || NewProjectWizardState.useDefaultIcon){//copy the default icon for app if using default icon.
 				Path sourceIconFile = FileSystems.getDefault().getPath(resourceFolder , "icon-48.png");

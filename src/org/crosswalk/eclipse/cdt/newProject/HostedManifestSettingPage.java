@@ -43,14 +43,14 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 		private static final int FIELD_WIDTH = 300;
 		static final int WIZARD_PAGE_WIDTH = 600;
 		private final NewProjectWizardState nProjectWizardState;
-		private Text webUrlText;
+		private Text startUrlText;
 		private Text xwalkVersionText;
 		public static Text iconPathText;
 		public static Text iconHeightText;
 		public static Text iconWidthText;
 		private ControlDecoration iconPathDec;
 		private ControlDecoration versionDec;
-		private ControlDecoration webUrlDec;
+		private ControlDecoration startUrlDec;
 		private ControlDecoration iconSizeDec1;
 		private ControlDecoration iconSizeDec2;
 		private Label helpNote;
@@ -60,9 +60,9 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 		private Button iconPathBrowser;
 		private Button useDefaultIcon;
 		private Boolean appNameCanFinish;
-		private Boolean launchUrlCanFinish;
+		private Boolean startUrlCanFinish;
 		private Boolean xwalkVersionChanged;
-		private Boolean launchUrlChanged;
+		private Boolean startUrlChanged;
 		private String iconSourceMessage;
 		
 		
@@ -72,7 +72,7 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 			 super("manifestSetting");
 			 NewProjectWizardState.isPackagedProject = false;
 			 xwalkVersionChanged = false;
-			 launchUrlChanged = false;
+			 startUrlChanged = false;
 			 iconSourceMessage = "Select the path of your favourite icon.";
 			 nProjectWizardState = values;
 			 
@@ -114,20 +114,20 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 					"The version of Crosswalk. It must contain 3-4 dot-separated segments ,and each between 0 and 9999.");
 
 			
-			Label webUrlLabel = new Label(container, SWT.NONE);
-			webUrlLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+			Label startUrlLabel = new Label(container, SWT.NONE);
+			startUrlLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
 					false, 2, 1));
-			webUrlLabel.setText("launch_url:");
+			startUrlLabel.setText("start_url:");
 			
-			webUrlText = new Text(container, SWT.BORDER);
+			startUrlText = new Text(container, SWT.BORDER);
 			GridData gdStartUrlText = new GridData(SWT.FILL, SWT.CENTER, true,
 					false,2, 1);
 			gdStartUrlText.widthHint = FIELD_WIDTH;
-			webUrlText.setText("https://crosswalk-project.org");
-			webUrlText.setLayoutData(gdStartUrlText);
-			webUrlText.addModifyListener(this);
-			webUrlText.addFocusListener(this);
-			webUrlDec = createFieldDecoration(webUrlText,
+			startUrlText.setText(NewProjectWizardState.hostedStartUrl);
+			startUrlText.setLayoutData(gdStartUrlText);
+			startUrlText.addModifyListener(this);
+			startUrlText.addFocusListener(this);
+			startUrlDec = createFieldDecoration(startUrlText,
 					"The access point of your application for Crosswalk.It must start with 'http://' or 'https://' .");			
 			
 			//Set the icon for application
@@ -280,7 +280,7 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 		public void modifyText(ModifyEvent e) {		
 			
 			Object source = e.getSource();
-			if (source == webUrlText) {
+			if (source == startUrlText) {
 				onWebUrlChange();
 		}
 			else if (source == iconPathText ){
@@ -307,11 +307,11 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 		}
 		
 		public void onWebUrlChange(){
-			if(!isWebUrlValid()){
+			if(!isStartUrlValid()){
 				setPageComplete(false);
 			}
 			else{
-				NewProjectWizardState.hostedLaunchUrl = webUrlText.getText().trim();
+				NewProjectWizardState.hostedStartUrl = startUrlText.getText().trim();
 				NewProjectWizardState.startUrlChanged = true;
 			}
 		}
@@ -361,7 +361,7 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 				errorCount++;
 				setMessage("Size of icon is not valid,please check the Note", WARNING);
 			}
-			else if(!isWebUrlValid()){
+			else if(!isStartUrlValid()){
 				errorCount++;
 				setMessage("The web_url you specified is not correct,please check the Note", WARNING);
 			}
@@ -399,15 +399,15 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 				return false;
 		} 
 		
-		public boolean isWebUrlValid(){
-			String webUrl = webUrlText.getText().toString();
+		public boolean isStartUrlValid(){
+			String startUrl = startUrlText.getText().toString();
 			String patternString = ".*http://.*";
 			String patternString2 = ".*https://.*";
 
 	        Pattern pattern = Pattern.compile(patternString);
 	        Pattern pattern2 = Pattern.compile(patternString2);
-	        Matcher matcher = pattern.matcher(webUrl);
-	        Matcher matcher2 = pattern2.matcher(webUrl);
+	        Matcher matcher = pattern.matcher(startUrl);
+	        Matcher matcher2 = pattern2.matcher(startUrl);
 			if(matcher.matches() || matcher2.matches())
 				return true;	
 			else 
@@ -462,8 +462,8 @@ public class HostedManifestSettingPage extends WizardPage implements ModifyListe
 
 			if (source == xwalkVersionText) {
 				tip = versionDec.getDescriptionText();
-			} else if (source == webUrlText) {
-				tip = webUrlDec.getDescriptionText();
+			} else if (source == startUrlText) {
+				tip = startUrlDec.getDescriptionText();
 			}else if (source == iconPathText) {
 				tip = iconPathDec.getDescriptionText();
 			}else if (source == iconHeightText) {

@@ -34,7 +34,7 @@ public class NewProjectWizardState {
 	public static String startUrl = "index.html";
 	public static boolean startUrlChanged = false;
 	public static String xwalkVersion = "0.0.1";
-	public static String hostedLaunchUrl = "https://crosswalk-project.org/";
+	public static String hostedStartUrl = "https://crosswalk-project.org/";
 	public static boolean isPackagedProject = true;
 	/** Whether the project name has been edited by the user */
 	public boolean projectModified;
@@ -45,13 +45,8 @@ public class NewProjectWizardState {
 	/** The location of crosswalk, it means crosswalk-app-template currently */
 	public String crosswalkLocation;
 
-//	public String entryFile = "index.html";
-	
-	
-	
 	public String customizedIcon;
-	//default icon for user.User may change it to their favorite one.
-	
+	//default icon for user. User may change it to their favorite one.
 	public String iconType = "image/png";
 	public String iconDensity = "1.0";
 	public String applicationVersion = "0.0.1";

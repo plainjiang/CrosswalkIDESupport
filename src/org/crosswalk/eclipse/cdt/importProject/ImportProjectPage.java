@@ -85,7 +85,8 @@ public class ImportProjectPage extends WizardPage implements SelectionListener,M
 		// Find manifest.json
 		File fd;
 		try {
-			fd = new File(dir + File.separator + "app");
+//			fd = new File(dir + File.separator + "app");
+			fd = new File(dir);
 		}
 		catch (Exception e) {
 			return false;
