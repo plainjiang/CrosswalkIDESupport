@@ -103,26 +103,24 @@ public final class ExportHelper {
 		
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-		
-		Path sourceManifestFile = FileSystems.getDefault().getPath(project.getLocation().toString(), "manifest.json");	//copy the manifest.json file
-
+		//copy the manifest.json file
+		Path sourceManifestFile = FileSystems.getDefault().getPath(project.getLocation().toString(), "manifest.json");	
 		String manifestLocation = project.getLocation().toString() + File.separator + "manifest.json";
 		JSONObject manifest = new JSONObject(new JSONTokener(				//get the manifest file 
 				new FileReader(manifestLocation)));
 		
 		String packageName = CdtConstants.CROSSWALK_PACKAGE_PREFIX + manifest.get("name");
-		
-
-			ProjectHelper projectHelper = new ProjectHelper();
-			projectHelper.resourceHandler(root.getLocation().toString());
-			String sourceFolder = project.getLocation().toString();
-			String targetFolder = sourceFolder + File.separator + ".tmp" + File.separator + packageName + File.separator + "app";
-			Path targetManifestFile = FileSystems.getDefault().getPath(targetFolder , "manifest.json");
-			Files.copy(sourceManifestFile, targetManifestFile, REPLACE_EXISTING);
-			//copy the icon file
-			if(NewProjectWizardState.useDefaultIcon){		//do nothing,since we copied the icon from org.crosswalk.appName folder
+//		ProjectHelper projectHelper = new ProjectHelper();
+//		projectHelper.resourceHandler(root.getLocation().toString());
+		String sourceFolder = project.getLocation().toString();
+		String targetFolder = sourceFolder + File.separator + ".tmp" + File.separator + packageName + File.separator + "app";
+		Path targetManifestFile = FileSystems.getDefault().getPath(targetFolder , "manifest.json");
+		Files.copy(sourceManifestFile, targetManifestFile, REPLACE_EXISTING);
+			
+		//copy the icon file
+		if(NewProjectWizardState.useDefaultIcon){		//do nothing,since we copied the icon from org.crosswalk.appName folder
 			}
-			else{			//user-specified icon.We have to delete the default icons and copy the user-specified icon
+		else{			//user-specified icon.We have to delete the default icons and copy the user-specified icon
 				String iconName = manifest.getJSONArray("icons").getJSONObject(2).get("src").toString();	
 				Path sourceIconFile = FileSystems.getDefault().getPath(sourceFolder, iconName);
 				Path targetIconFile = FileSystems.getDefault().getPath(targetFolder, iconName);
@@ -137,7 +135,7 @@ public final class ExportHelper {
 			
 			//copy the launch file.
 			//We must copy this file no matter whether the name is index.html since user may change it after setting it in manifestSettingPage
-			if(NewProjectWizardState.isPackagedProject){
+		if(NewProjectWizardState.isPackagedProject){
 				String startUrl = manifest.get("start_url").toString();
 				Path sourceStartUrlFile = FileSystems.getDefault().getPath(sourceFolder, startUrl);
 				Path targetStartUrlFile = FileSystems.getDefault().getPath(targetFolder, startUrl);
@@ -148,12 +146,10 @@ public final class ExportHelper {
 		
 		
 		File buildDir = new File(project.getLocation().toString() + File.separator+".tmp" + File.separator + packageName);
-		
 		cmd.append("crosswalk-app build");	
 		pMonitor.worked(1);
 		Process process = Runtime.getRuntime().exec(cmd.toString(),
 					mapToStringArray(env), buildDir);//execute cmd in specific targetFolder
-		
 		try {
 			process.waitFor();
 		} catch (InterruptedException e1) {
@@ -166,9 +162,6 @@ public final class ExportHelper {
 		Path target = FileSystems.getDefault().getPath(packageparameters.targetFolder,debPackageName);
 		Files.copy(source, target, REPLACE_EXISTING);
 
-		
-		
-		
 			try {
 				for (int i=0; i<20; i++) {
 					pMonitor.worked(1);
@@ -195,8 +188,5 @@ public final class ExportHelper {
 				return runResult;
 		
 	}
-	
-	
-		
 
 }
